@@ -27,7 +27,6 @@
         "@babel/core": "^7.0.0",
         "@babel/plugin-proposal-class-properties": "^7.0.0",
         "@babel/preset-env": "^7.0.0",
-        "@babel/preset-react": "^7.0.0",
         "@babel/register": "^7.0.0",
         "autoprefixer": "^7.0.0",
         "babel-core": "^6.0.0",
@@ -51,16 +50,13 @@
         "jsdom": "^15.0.0",
         "mocha": "^6.0.0",
         "nodelist-to-array": "^2.0.0",
-        "react": "^16.0.0",
-        "react-dom": "^16.0.0",
         "vinyl-buffer": "^1.0.0",
         "vinyl-source-stream": "^2.0.0",
         "watchify": "^3.0.0"
     },
     "babel": {
         "presets": [
-            "@babel/env",
-            "@babel/preset-react"
+            "@babel/env"
         ]
     },
     "browserify": {
@@ -69,8 +65,7 @@
                 "babelify",
                 {
                     "presets": [
-                        "@babel/env",
-                        "@babel/preset-react"
+                        "@babel/env"
                     ]
                 }
             ]

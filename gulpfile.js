@@ -125,7 +125,7 @@ const jsEs6 = () => {
     const set_babelify = {
         presets: [
             '@babel/env',
-            '@babel/preset-react',
+            // '@babel/preset-react',
         ],
         "plugins": [
             [
