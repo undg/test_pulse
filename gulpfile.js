@@ -231,8 +231,8 @@ gulp.task('watch_bs', ['browserSync'], () => {
     watch_scss()
     gulp.watch(['./src/js/**/*.js', '!./src/js/**/node_modules/**'], ['js'])
     gulp.watch([
-        './app/**/*.php',
-        './app/**/*.html',
+        './**/*.php',
+        './**/*.html',
     ], {delay: 300}).on( 'change', bsync.reload )
 })
 
