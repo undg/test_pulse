@@ -1,7 +1,8 @@
 console.log('\n\n\n\n')
 const expect = require('chai').expect
 
-require('jsdom-global')('<!DOCTYPE html><div id="id"></div>')
+const api_url = 'api/player-stats.json'
+require('jsdom-global')(`<!DOCTYPE html><div id="id" data-url="${api_url}"></div>`)
 
 const axios = require('axios')
 const moxios = require('moxios')
@@ -13,7 +14,7 @@ import PlayerCard from './../src/js/PlayerCard'
 describe('PlayerCard.js', () => {
     beforeEach(function () {
         moxios.install()
-        moxios.stubRequest('api/player-stats.json', {
+        moxios.stubRequest(api_url, {
             status: 200,
             response: {
                 data: player_stats_json
@@ -54,6 +55,14 @@ describe('PlayerCard.js', () => {
             const playerCard = new PlayerCard({dom_id: "id"})
             expect(playerCard.dom_root.firstElementChild.classList.contains('card')).to.be.ok
         })
+    })
+
+    // from now on TDD 
+    describe('dom elements', () => {
+        it('should have data-url attr', () => {
+            const playerCard = new PlayerCard({dom_id: "id"})
+            expect(playerCard.api_url).to.eq(api_url)
+        } )
     })
 
 })

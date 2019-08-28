@@ -13,9 +13,11 @@ export default class {
         } else if (!!dom_className) {
             this.dom_root = document.querySelector('.' + dom_className)
         } 
+        this.api_url = this.dom_root.dataset.url
+        this.url = this.api_url
 
 
-        this.api = new Api({url: 'api/player-stats.json', test: true})
+        this.api = new Api({url: this.api_url, test: true})
         this.api.get_data({cb: this.update.bind(this), test: true})
     }
 
