@@ -1,0 +1,59 @@
+.container {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 0;
+    div {
+    }
+}
+
+// in real project .root should be renamed to something uniq
+// maybe randomly generated class name
+.root {
+    .card {
+        > * { box-sizing: border-box; } // for every sibling in this container
+        width: 300px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+        $cardPadding: 15px;
+        .img,
+        .title,
+        .logo,
+        .subtitle,
+        .stats{
+            width: 100%;
+        }
+
+        .dropdown{
+            height: 40px;
+            width: 270px;
+            margin: $cardPadding;
+        }
+        .img{
+            height: 220px;
+            margin: 0 $cardPadding;
+            width: calc(100% - #{$cardPadding * 2})
+        }
+        .logo{
+            height: 0;
+            position: relative;
+        }
+        .title{
+            height: 40px;
+            padding-top: $cardPadding;
+            padding-bottom: 10px;
+            font-size: 18px;
+        }
+        .subtitle{
+            font-size: 14px;
+        }
+        .stats {
+            padding: $cardPadding;
+        }
+    }
+}
