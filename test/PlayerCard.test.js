@@ -7,7 +7,7 @@ require('jsdom-global')(`<!DOCTYPE html><div id="id" data-url="${api_url}"></div
 const axios = require('axios')
 const moxios = require('moxios')
 
-const player_stats_json = require('../api/player-stats.json')
+const json = require('../api/player-stats.json')
 
 import PlayerCard from './../src/js/PlayerCard'
 
@@ -17,8 +17,8 @@ describe('PlayerCard.js', () => {
         moxios.stubRequest(api_url, {
             status: 200,
             response: {
-                data: player_stats_json
-            }
+                data: json,
+            },
         })
     })
 
@@ -103,15 +103,61 @@ describe('PlayerCard.js', () => {
             wrap: document.createElement('div'),
             footer: document.createElement('div'),
         }
+
         it('should return object with same keys', () => {
             const playerCard = new PlayerCard({dom_id: "id"})
             expect(playerCard.set_classNames(dom)).to.have.keys('wrap', 'footer')
         })
+
         it('should return object and add className to each element', () => {
             const playerCard = new PlayerCard({dom_id: "id"})
             expect(playerCard.set_classNames(dom).wrap.classList.value).to.eq('wrap')
             expect(playerCard.set_classNames(dom).footer.classList.value).to.eq('footer')
         })
+
+        it('should be and function', () => {
+            const playerCard = new PlayerCard({dom_id: "id"})
+            expect(playerCard.card).to.be.an('Function')
+        })
+
+        it('should append div.dropdown', () => {
+            const playerCard = new PlayerCard({dom_id: "id"})
+            const dom = playerCard.dom
+            expect(playerCard.card({dom: dom, data: json}).childNodes[0].classList[0]).to.eq('dropdown')
+        })
+
+        it('should append div.img', () => {
+            const playerCard = new PlayerCard({dom_id: "id"})
+            const dom = playerCard.dom
+            expect(playerCard.card({dom: dom, data: json}).childNodes[1].classList[0]).to.eq('img')
+        })
+
+        it('should append div.logo', () => {
+            const playerCard = new PlayerCard({dom_id: "id"})
+            const dom = playerCard.dom
+            expect(playerCard.card({dom: dom, data: json}).childNodes[2].classList[0]).to.eq('logo')
+        })
+
+        it('should append div.title', () => {
+            const playerCard = new PlayerCard({dom_id: "id"})
+            const dom = playerCard.dom
+            expect(playerCard.card({dom: dom, data: json}).childNodes[3].classList[0]).to.eq('title')
+        })
+
+        it('should append div.subtitle', () => {
+            const playerCard = new PlayerCard({dom_id: "id"})
+            const dom = playerCard.dom
+            expect(playerCard.card({dom: dom, data: json}).childNodes[4].classList[0]).to.eq('subtitle')
+        })
+
+        it('should append div.stats', () => {
+            const playerCard = new PlayerCard({dom_id: "id"})
+            const dom = playerCard.dom
+            expect(playerCard.card({dom: dom, data: json}).childNodes[5].classList[0]).to.eq('stats')
+        })
+
+
+
     })
 })
 

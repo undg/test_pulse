@@ -16,9 +16,7 @@ export default class {
 
 
         this.old_dom = {} // helper obj, history buffer
-
-        this.dom_root
-        this.data
+        this.data // 
 
         if(!!dom_id) {
             this.dom.root = document.getElementById(dom_id)
@@ -36,32 +34,40 @@ export default class {
         this.dom = this.set_classNames(this.dom)
     }
 
-    card() {
-        if(!this.data) {
-            return null
-        }
-        const {card} = this.dom
-        
-        card.classList.add('card')
-
-        // tmp
-        const pre = document.createElement('pre')
-        pre.innerText = this.data && JSON.stringify(this.data, null, 4)
-        card.append(pre)
-
-        return card
-    }
-
     update(data) {
-        this.data = data
-
         this.dom.root.innerHTML = "" // 😥
 
-        this.dom.card = this.card()
+        this.dom.card = this.card({dom:this.dom, data: data})
         this.dom.root.append(this.dom.card)
     }
 
+    card({dom, data}) {
+        this.data = data
+        if(!data) {
+            return null
+        }
+        const {
+            card,
+            dropdown,
+            img,
+            logo,
+            title,
+            subtitle,
+            stats,
+        } = dom
+
+        const divs = [ dropdown, img, logo, title, subtitle, stats, ]
+        divs.forEach( div => card.append(div) )
+        
+        this.tmp()
+        return card
+    }
+
+
     dropdown() {
+    }
+
+    stats() {
     }
 
     set_classNames(dom) {
@@ -69,6 +75,12 @@ export default class {
         return dom
     }
 
+    tmp() {
+        return
+        const pre = document.createElement('pre')
+        pre.innerText = this.data && JSON.stringify(this.data, null, 4)
+        this.dom.card.append(pre)
+    }
 }
 
 
