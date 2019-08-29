@@ -4,13 +4,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
+    box-sizing: border-box;
     padding: 40px 0;
-    div {
-    }
 }
 
 // in real project .root should be renamed to something uniq
-// maybe randomly generated class name
+// maybe randomly generated class name (it should be fast to install mudule?)
 .root {
     .card {
         > * { box-sizing: border-box; } // for every sibling in this container

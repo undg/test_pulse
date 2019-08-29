@@ -59,7 +59,6 @@ export default class {
         const divs = [ dropdown, img, logo, title, subtitle, stats, ]
         divs.forEach( div => card.append(div) )
         
-        this.tmp()
         return card
     }
 
@@ -67,7 +66,19 @@ export default class {
     dropdown() {
     }
 
-    stats() {
+    stats({stats_dom, stats_data}) {
+
+        const display = ['appearances', 'goals', 'goal_assist']
+
+        stats_data.forEach(stat => {
+            if(display.indexOf(stat.name) === -1) {
+                return
+            }
+            const row = document.createElement('div')
+            stats_dom.append(row)
+        })
+
+        return stats_dom
     }
 
     set_classNames(dom) {
@@ -75,12 +86,6 @@ export default class {
         return dom
     }
 
-    tmp() {
-        return
-        const pre = document.createElement('pre')
-        pre.innerText = this.data && JSON.stringify(this.data, null, 4)
-        this.dom.card.append(pre)
-    }
 }
 
 

@@ -120,40 +120,61 @@ describe('PlayerCard.js', () => {
             expect(playerCard.card).to.be.an('Function')
         })
 
-        it('should append div.dropdown', () => {
-            const playerCard = new PlayerCard({dom_id: "id"})
-            const dom = playerCard.dom
-            expect(playerCard.card({dom: dom, data: json}).childNodes[0].classList[0]).to.eq('dropdown')
+
+
+        describe('card()', () => {
+            it('should append div.dropdown', () => {
+                const playerCard = new PlayerCard({dom_id: "id"})
+                const card = playerCard.card({dom: playerCard.dom, data: json})
+                expect(card.childNodes[0].classList[0]).to.eq('dropdown')
+            })
+
+            it('should append div.img', () => {
+                const playerCard = new PlayerCard({dom_id: "id"})
+                const card = playerCard.card({dom: playerCard.dom, data: json})
+                expect(card.childNodes[1].classList[0]).to.eq('img')
+            })
+
+            it('should append div.logo', () => {
+                const playerCard = new PlayerCard({dom_id: "id"})
+                const card = playerCard.card({dom: playerCard.dom, data: json})
+                expect(card.childNodes[2].classList[0]).to.eq('logo')
+            })
+
+            it('should append div.title', () => {
+                const playerCard = new PlayerCard({dom_id: "id"})
+                const card = playerCard.card({dom: playerCard.dom, data: json})
+                expect(card.childNodes[3].classList[0]).to.eq('title')
+            })
+
+            it('should append div.subtitle', () => {
+                const playerCard = new PlayerCard({dom_id: "id"})
+                const card = playerCard.card({dom: playerCard.dom, data: json})
+                expect(card.childNodes[4].classList[0]).to.eq('subtitle')
+            })
+
+            it('should append div.stats', () => {
+                const playerCard = new PlayerCard({dom_id: "id"})
+                const card = playerCard.card({dom: playerCard.dom, data: json})
+                expect(card.childNodes[5].classList[0]).to.eq('stats')
+            })
         })
 
-        it('should append div.img', () => {
-            const playerCard = new PlayerCard({dom_id: "id"})
-            const dom = playerCard.dom
-            expect(playerCard.card({dom: dom, data: json}).childNodes[1].classList[0]).to.eq('img')
-        })
 
-        it('should append div.logo', () => {
-            const playerCard = new PlayerCard({dom_id: "id"})
-            const dom = playerCard.dom
-            expect(playerCard.card({dom: dom, data: json}).childNodes[2].classList[0]).to.eq('logo')
-        })
 
-        it('should append div.title', () => {
-            const playerCard = new PlayerCard({dom_id: "id"})
-            const dom = playerCard.dom
-            expect(playerCard.card({dom: dom, data: json}).childNodes[3].classList[0]).to.eq('title')
-        })
+        describe('stats()', () => {
+            it('should be OK', () => {
+                const playerCard = new PlayerCard({dom_id: "id"})
+                const stats = playerCard.stats({stats_dom: playerCard.dom.stats, stats_data: json.players[0].stats})
+                expect(stats).to.be.ok
+            })
 
-        it('should append div.subtitle', () => {
-            const playerCard = new PlayerCard({dom_id: "id"})
-            const dom = playerCard.dom
-            expect(playerCard.card({dom: dom, data: json}).childNodes[4].classList[0]).to.eq('subtitle')
-        })
+            it('should be OK', () => {
+                const playerCard = new PlayerCard({dom_id: "id"})
+                const stats = playerCard.stats({stats_dom: playerCard.dom.stats, stats_data: json.players[0].stats})
+                expect(stats.childElementCount).to.eq(3)
+            })
 
-        it('should append div.stats', () => {
-            const playerCard = new PlayerCard({dom_id: "id"})
-            const dom = playerCard.dom
-            expect(playerCard.card({dom: dom, data: json}).childNodes[5].classList[0]).to.eq('stats')
         })
 
 
