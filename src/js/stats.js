@@ -37,12 +37,22 @@ export default class {
             value: value,
         }
     }
-    get goals_per_minute(){
+    get passes_per_minute(){
         const pass = this.api.backward_pass + this.api.fwd_pass
         const value = Math.round(pass / this.api.mins_played * 100) / 100
         return {
-            name: "Goals per minute",
+            name: "Passes per minute",
             value: value,
         }
+    }
+
+    get display() {
+        return [
+            this.appearances,
+            this.goals,
+            this.assist,
+            this.goals_per_match,
+            this.passes_per_minute,
+        ]
     }
 }

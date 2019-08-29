@@ -55,5 +55,16 @@
         .stats {
             padding: $cardPadding;
         }
+        .stats_row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px;
+        }
+        .stats_name {
+
+        }
+        .stats_value {
+
+        }
     }
 }

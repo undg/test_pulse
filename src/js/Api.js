@@ -8,6 +8,6 @@ export default  class {
     get_data({cb}) {
         axios.get(this.url)
             .then(res => cb(res.data))
-            .catch(err => console.error(err.toJSON()))
+            .catch(err => console.error(err))
     }
 }

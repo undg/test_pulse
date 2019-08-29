@@ -1,4 +1,5 @@
 import Api from './Api'
+import Stats from './stats'
 
 export default class {
     constructor({dom_id, dom_className, dom_dataAttr}) {
@@ -12,6 +13,10 @@ export default class {
             title: document.createElement('div'),
             subtitle: document.createElement('div'),
             stats: document.createElement('div'),
+        }
+
+        this.state = {
+            player_idx: 0, // tmp hardcoded
         }
 
 
@@ -36,14 +41,21 @@ export default class {
 
     update(data) {
         this.dom.root.innerHTML = "" // 😥
+        if(!data.players) { // w8 for api
+            return
+        }
 
-        this.dom.card = this.card({dom:this.dom, data: data})
+        this.dom.stats = this.stats({
+            stats_dom: this.dom.stats,
+            stats_data: data.players[0].stats
+        })
+        this.dom.card = this.card({dom: this.dom, data: data})
         this.dom.root.append(this.dom.card)
     }
 
-    card({dom, data}) {
+    card({dom, data, stats_cb}) {
         this.data = data
-        if(!data) {
+        if(!this.data) {
             return null
         }
         const {
@@ -56,7 +68,16 @@ export default class {
             stats,
         } = dom
 
-        const divs = [ dropdown, img, logo, title, subtitle, stats, ]
+        
+            
+        const divs = [
+            dropdown,
+            img,
+            logo,
+            title,
+            subtitle,
+            stats,
+        ]
         divs.forEach( div => card.append(div) )
         
         return card
@@ -67,14 +88,21 @@ export default class {
     }
 
     stats({stats_dom, stats_data}) {
+        const display = new Stats({stats_data: stats_data}).display
 
-        const display = ['appearances', 'goals', 'goal_assist']
-
-        stats_data.forEach(stat => {
-            if(display.indexOf(stat.name) === -1) {
-                return
-            }
+        display.forEach(stat => {
             const row = document.createElement('div')
+            row.classList.add("stats_row")
+
+            const name = document.createElement('p')
+            name.innerText = stat.name
+            name.classList.add("stats_name")
+
+            const value = document.createElement('p')
+            value.innerText = `${stat.value}`
+            value.classList.add("stats_value")
+
+            row.append(name, value)
             stats_dom.append(row)
         })
 

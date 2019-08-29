@@ -25,8 +25,16 @@ describe('stats.js', () => {
         expect(stats.goals_per_match).to.eql({name: "Goals per match", value: 0.06})
     })
 
-    it('should return Goals per minute(0.26)', () => {
-        expect(stats.goals_per_minute).to.eql({name: "Goals per minute", value: 0.26})
+    it('should return Passes per minute(0.26)', () => {
+        expect(stats.passes_per_minute).to.eql({name: "Passes per minute", value: 0.26})
+    })
+
+    it('should return array', () => {
+        expect(stats.display).to.be.an('array')
+    })
+
+    it('should return array', () => {
+        expect(stats.display).to.be.lengthOf(5)
     })
 
 })
