@@ -1,20 +1,28 @@
 export default class {
     constructor({stats_data}) {
+        const null_pattern = (name)  =>
+            !!stats_data.find(stat => stat.name === name)
+                ? stats_data.find(stat => stat.name === name)
+                : {value: 0}
+
         this.api = {
-            appearances   : stats_data.find(stat => stat.name === "appearances").value,
-            goals         : stats_data.find(stat => stat.name === "goals").value,
-            goal_assist   : stats_data.find(stat => stat.name === "goal_assist").value,
-            mins_played   : stats_data.find(stat => stat.name === "mins_played").value,
-            backward_pass : stats_data.find(stat => stat.name === "backward_pass").value,
-            fwd_pass      : stats_data.find(stat => stat.name === "fwd_pass").value,
+            appearances   : null_pattern("appearances").value,
+            goals         : null_pattern("goals").value,
+            goal_assist   : null_pattern("goal_assist").value,
+            mins_played   : null_pattern("mins_played").value,
+            backward_pass : null_pattern("backward_pass").value,
+            fwd_pass      : null_pattern("fwd_pass").value,
         }
+
     }
+
     get appearances() {
         return {
             name: "Appearances",
             value: this.api.appearances,
         }
     }
+
     get goals(){
         return {
             name: "Goals",
@@ -30,7 +38,9 @@ export default class {
     }
 
     get goals_per_match(){
-        const value = Math.round(this.api.goals / this.api.appearances * 100) / 100
+        const value = this.api.goals !== 0 || this.api.appearances !== 0
+            ? Math.round(this.api.goals / this.api.appearances * 100) / 100
+            : 0
         return {
             name: "Goals per match",
             value: value,
@@ -38,7 +48,9 @@ export default class {
     }
     get passes_per_minute(){
         const pass = this.api.backward_pass + this.api.fwd_pass
-        const value = Math.round(pass / this.api.mins_played * 100) / 100
+        const value = pass !== 0 || this.api.mins_played !== 0
+            ? Math.round(pass / this.api.mins_played * 100) / 100
+            : 0
         return {
             name: "Passes per minute",
             value: value,

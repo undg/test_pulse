@@ -37,6 +37,12 @@ describe('stats.js', () => {
         expect(stats.display).to.be.lengthOf(5)
     })
 
+    describe('Null object pattern', () => {
+        const stats = new Stats({stats_data: json.players[3].stats})
+        it('should return 0 (assist)', () => {
+            expect(stats.display[2].value).to.eq(0)
+        })
+    })
 })
 
 
