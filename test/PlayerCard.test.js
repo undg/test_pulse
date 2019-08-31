@@ -2,9 +2,13 @@ console.log('\n\n\n\n')
 const expect = require('chai').expect
 
 const api_url = 'api/player-stats.json'
+const img_url = 'img_path/'
 require('jsdom-global')(`
 <!DOCTYPE html>
-    <div id="id" data-url="${api_url}"></div>
+        <div id="id"
+        data-api_url="${api_url}"
+        data-img_url="${img_url}"
+    ></div>
 </html>
 `)
 
@@ -160,29 +164,71 @@ describe('PlayerCard.js', () => {
 
         describe('header()', () => {
             const header = playerCard.header({
+                img_dom: playerCard.dom.img,
+                logo_dom: playerCard.dom.logo,
                 title_dom: playerCard.dom.title,
                 subtitle_dom: playerCard.dom.subtitle,
+                img_url: playerCard.img_url,
                 player_data: json.players[0].player,
             })
             it('should be OK', () => {
                 expect(header).to.be.ok
             })
 
-            it('should have a <h2>', () => {
-                expect(header.title.firstElementChild.tagName).to.eq('H2')
+            describe('player inforamtions', () => {
+                it('should have a <h2>', () => {
+                    expect(header.title.firstElementChild.tagName).to.eq('H2')
+                })
+
+                it('should have a class ".player_name"', () => {
+                    expect(header.title.firstElementChild.classList.contains('player_name')).to.be.true
+                })
+
+                it('should have a <h2>', () => {
+                    expect(header.title.firstElementChild.innerText).to.eq('Toby Alderweireld')
+                })
+
+                it('should have a <h3>', () => {
+                    expect(header.subtitle.firstElementChild.tagName).to.eq('H3')
+                })
+
+                it('should have a class ".player_team"', () => {
+                    expect(header.subtitle.firstElementChild.classList.contains('player_team')).to.be.true
+                })
             })
 
-            it('should have a <h3>', () => {
-                expect(header.subtitle.firstElementChild.tagName).to.eq('H3')
+            describe('player photo', () => {
+                it('should have a <img>', () => {
+                    expect(header.img.firstElementChild.tagName).to.eq('IMG')
+                })
+
+                it('should have a <img>', () => {
+                    expect(header.img.firstElementChild.classList[0]).to.eq('player_photo')
+                })
+
+                it('should have a src to correct image', () => {
+                    expect(header.img.firstElementChild.src).to.eq('img_path/p4916.png')
+                })
             })
 
-            it('should have a <h2>', () => {
-                expect(header.title.firstElementChild.innerText).to.eq('Toby Alderweireld')
+            describe('logo', () => {
+                it('should have a <div>', () => {
+                    expect(header.logo.firstElementChild.tagName).to.eq('DIV')
+                })
+
+                it('should have a class .emblem', () => {
+                    expect(header.logo.firstElementChild.classList[0]).to.eq('emblem')
+                })
+
+                it('should have a src to correct image', () => {
+                    expect(header.logo.firstElementChild.style.backgroundImage).to.eq('url(img_path/badges_sprite.png)')
+                })
+
+                it('should have a src to correct image', () => {
+                    expect(header.logo.firstElementChild.style.backgroundPosition).to.eq('-1000px')
+                })
             })
 
-            // it('should have a <h3>', () => {
-            //     expect(header.subtitle.firstElementChild.innerText).to.eq('')
-            // })
         })
 
     })

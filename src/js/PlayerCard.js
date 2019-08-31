@@ -6,7 +6,6 @@ export default class {
     constructor({dom_id, dom_className, dom_dataAttr}) {
         this.dom = {
             root: null,
-            // cards: [], I have a feeling that this array can be used for grid of cards
             card: document.createElement('div'),
             dropdown: document.createElement('div'),
             img: document.createElement('div'),
@@ -36,7 +35,9 @@ export default class {
         }
 
 
-        this.api_url = this.dom.root.dataset.url
+        this.api_url = this.dom.root.dataset.api_url
+        this.img_url = this.dom.root.dataset.img_url
+
         this.api = new Api({url: this.api_url, test: true})
         this.api.get_data({cb: this.update.bind(this)})
 
@@ -59,16 +60,28 @@ export default class {
         })
 
         const header = this.header({
+            img_dom: this.dom.img,
+            logo_dom: this.dom.logo,
             title_dom: this.dom.title,
             subtitle_dom: this.dom.subtitle,
+            img_url: this.img_url,
             player_data: this.player.player(data),
         })
 
+        this.dom.img = header.img
+        this.dom.logo = header.logo
         this.dom.title = header.title
         this.dom.subtitle = header.subtitle
 
         this.dom.card = this.card({dom: this.dom, data: data})
         this.dom.root.append(this.dom.card)
+    }
+
+
+
+    set_classNames(dom) {
+        Object.keys(dom).forEach(key=>dom[key].classList.add(key))
+        return dom
     }
 
 
@@ -107,18 +120,35 @@ export default class {
 
 
 
-    header({title_dom, subtitle_dom, player_data}) {
-        const player = new Player({player_data: player_data})
+    header({title_dom, subtitle_dom, img_dom, logo_dom, img_url, logo, player_data}) {
+        const player = new Player({player_data: player_data, img_url: img_url})
+  
+        const sprite = document.createElement('div')
+        const top = player.sprite.position.top + 'px' 
+        const left = player.sprite.position.left + 'px' 
+        const style = `background: url('${player.sprite.url}') left ${left} top ${top};`
+        sprite.setAttribute('style', style)
+        sprite.classList.add('emblem')
+        logo_dom.append(sprite)
+
+        const player_photo = document.createElement('img')
+        player_photo.src = player.img_url
+        player_photo.classList.add('player_photo')
+        img_dom.append(player_photo)
+
         const name = document.createElement('h2')
         name.innerText = player.name
+        name.classList.add('player_name')
+        title_dom.append(name)
 
         const position = document.createElement('h3')
         position.innerText = player.position
-
-        title_dom.append(name)
+        position.classList.add('player_team')
         subtitle_dom.append(position)
 
         return {
+            img: img_dom,
+            logo: logo_dom,
             title: title_dom,
             subtitle: subtitle_dom,
         }
@@ -146,13 +176,6 @@ export default class {
         })
 
         return stats_dom
-    }
-
-
-
-    set_classNames(dom) {
-        Object.keys(dom).forEach(key=>dom[key].classList.add(key))
-        return dom
     }
 
 }

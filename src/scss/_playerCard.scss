@@ -38,10 +38,27 @@
             height: 220px;
             margin: 0 $cardPadding;
             width: calc(100% - #{$cardPadding * 2});
+            overflow: hidden;
+            .player_photo {
+                height: 100%;
+            }
         }
         .logo{
             height: 0;
-            position: relative;
+            width: 100%;
+            .emblem {
+                float: right;
+                $size: 100px;
+                width: $size;
+                height: $size;
+                border-radius: 50%;
+                // emblem on sprite is 100px, but on design it is 80px
+                $scale: 0.8; 
+                // .*3d() will use GPU. It is cheaper.
+                transform: translate3d(-10px, -40%, 0) scale3d($scale, $scale, $scale);
+                overflow: hidden;
+                position: relative;
+            }
         }
         .title{
             width: calc(100% - #{$cardPadding * 2});
