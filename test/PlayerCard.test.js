@@ -160,10 +160,7 @@ describe('PlayerCard.js', () => {
 
         describe('header()', () => {
             const header = playerCard.header({
-                img_dom: playerCard.dom.img,
-                logo_dom: playerCard.dom.logo,
-                title_dom: playerCard.dom.title,
-                subtitle_dom: playerCard.dom.subtitle,
+                dom: playerCard.dom,
                 img_url: playerCard.img_url,
                 player_data: json.players[0].player,
             })

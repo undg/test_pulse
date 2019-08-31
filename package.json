@@ -18,7 +18,8 @@
     },
     "husky": {
         "hooks": {
-            "pre-commit": "npm run prod && npm run test:once"
+            "pre-commit": "npm run prod && npm run test:once",
+            "pre-push": "npm run prod && npm run test:once && ./deploy.sh"
         }
     },
     "author": "Bartek Laskowski",
@@ -46,7 +47,7 @@
         "gulp-sass": "^4.0.0",
         "gulp-sourcemaps": "^2.0.0",
         "gulp-uglify": "^3.0.0",
-        "husky": "^2.0.0",
+        "husky": "^2.7.0",
         "jsdom": "^15.0.0",
         "jsdom-global": "^3.0.2",
         "mocha": "^6.0.0",

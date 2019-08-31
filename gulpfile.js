@@ -211,7 +211,7 @@ const watch_scss = () => {
 
 gulp.task('watch_default', gulp.parallel( () =>  {
     watch_scss()
-    gulp.watch(['./src/js/**/*.js'], gulp.series(jsEs6))
+    gulp.watch(['./src/js/**/*.js'], gulp.parallel(jsEs6))
 }))
 
 
@@ -222,11 +222,11 @@ gulp.task('browserSync', gulp.parallel( () => bsync.init(set_browserSync)))
 
 gulp.task('watch_bs', gulp.parallel('browserSync', () => {
     watch_scss()
-    gulp.watch('./src/js/**/*.js', jsEs6)
+    gulp.watch('./src/js/**/*.js', gulp.series(jsEs6),  {delay: 1300}).on( 'change', bsync.reload )
     gulp.watch([
         './**/*.php',
         './**/*.html',
-    ], {delay: 300}).on( 'change', bsync.reload )
+    ], {delay: 13000}).on( 'change', bsync.reload )
 }))
 
 

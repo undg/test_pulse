@@ -7,21 +7,20 @@ export default class {
         this.tdd = tdd
 
         this.dom = {
-            root: null,
-            card: document.createElement('div'),
-            dropdown: document.createElement('div'),
-            img: document.createElement('div'),
-            logo: document.createElement('div'),
-            title: document.createElement('div'),
-            subtitle: document.createElement('div'),
-            stats: document.createElement('div'),
+            root     : null,
+            card     : document.createElement('div'),
+            dropdown : document.createElement('div'),
+            img      : document.createElement('div'),
+            logo     : document.createElement('div'),
+            title    : document.createElement('div'),
+            subtitle : document.createElement('div'),
+            stats    : document.createElement('div'),
         }
 
         this.player = {
-            idx: 0,
-            stats: data => data.players[this.player.idx].stats,
-            player: data => data.players[this.player.idx].player,
-            position: data => "tmp",
+            idx    : 0,
+            stats  : data => data.players[this.player.idx].stats,
+            player : data => data.players[this.player.idx].player,
         }
 
         this.lang = {
@@ -41,7 +40,7 @@ export default class {
         this.api_url = this.dom.root.dataset.api_url
         this.img_url = this.dom.root.dataset.img_url
 
-        this.api = new Api({url: this.api_url, test: true})
+        this.api = new Api({url: this.api_url})
         this.api.get_data({cb: this.update.bind(this)})
 
         this.dom = this.set_classNames(this.dom)
@@ -60,31 +59,19 @@ export default class {
             }
         } else {
             this.dom.dropdown.innerHTML = ""
-            this.dom.img.innerHTML = ""
-            this.dom.logo.innerHTML = ""
-            this.dom.title.innerHTML = ""
+            this.dom.img.innerHTML      = ""
+            this.dom.logo.innerHTML     = ""
+            this.dom.title.innerHTML    = ""
             this.dom.subtitle.innerHTML = ""
-            this.dom.card.innerHTML = ""
-            this.dom.stats.innerHTML = ""
+            this.dom.card.innerHTML     = ""
+            this.dom.stats.innerHTML    = ""
         }
 
         if(!data.players) { // w8 for api
             return
         }
 
-        this.dom.stats = this.stats({
-            stats_dom: this.dom.stats,
-            stats_data: this.player.stats(data),
-        })
-
-        const header = this.header({
-            img_dom: this.dom.img,
-            logo_dom: this.dom.logo,
-            title_dom: this.dom.title,
-            subtitle_dom: this.dom.subtitle,
-            img_url: this.img_url,
-            player_data: this.player.player(data),
-        })
+        const card = this.card({dom: this.dom, data: data})
 
         const dropdown = this.dropdown({
             dropdown_dom: this.dom.dropdown,
@@ -94,14 +81,26 @@ export default class {
             lang: this.lang,
         })
 
+        const header = this.header({
+            dom          : this.dom,
+            img_url      : this.img_url,
+            player_data  : this.player.player(data),
+        })
+
+        const stats = this.stats({
+            stats_dom  : this.dom.stats,
+            stats_data : this.player.stats(data),
+        })
+
+
+        this.dom.card     = card
         this.dom.dropdown = dropdown
-
-        this.dom.img = header.img
-        this.dom.logo = header.logo
-        this.dom.title = header.title
+        this.dom.img      = header.img
+        this.dom.logo     = header.logo
+        this.dom.title    = header.title
         this.dom.subtitle = header.subtitle
+        this.dom.stats    = stats
 
-        this.dom.card = this.card({dom: this.dom, data: data})
         this.dom.root.append(this.dom.card)
     }
 
@@ -118,27 +117,16 @@ export default class {
         this.data = data
         if(!data) { return null }
 
-        const {
-            card,
-            dropdown,
-            img,
-            logo,
-            title,
-            subtitle,
-            stats,
-        } = dom
+        dom.card.append(
+            dom.dropdown,
+            dom.img,
+            dom.logo,
+            dom.title,
+            dom.subtitle,
+            dom.stats,
+        )
 
-        const divs = [
-            dropdown,
-            img,
-            logo,
-            title,
-            subtitle,
-            stats,
-        ]
-        divs.forEach( div => card.append(div) )
-
-        return card
+        return dom.card
     }
 
 
@@ -146,7 +134,9 @@ export default class {
     dropdown({dropdown_dom, playersNames_data, lang}) {
         const span = document.createElement('span')
         span.innerText = lang.select_player.en
-        span.addEventListener('click', () => dropdown_dom.classList.toggle('open'))
+        span.addEventListener('click', () => {
+            dropdown_dom.classList.toggle('open')
+        })
 
         const ul = document.createElement('ul')
         const names = playersNames_data.forEach((name, idx) => {
@@ -154,50 +144,65 @@ export default class {
             li.addEventListener('click', () => {
                 this.player.idx = idx
                 dropdown_dom.classList.toggle('open')
+                // update with static data, but we can call another API
                 this.update(this.data)
             })
             li.innerText = name
             ul.append(li)
         })
 
-        dropdown_dom.append(span)
-        dropdown_dom.append(ul)
+        dropdown_dom.append(span, ul)
         return dropdown_dom
     }
 
 
 
-    header({title_dom, subtitle_dom, img_dom, logo_dom, img_url, logo, player_data}) {
+    header({ dom, img_url, player_data}) {
         const player = new Player({player_data: player_data, img_url: img_url})
   
-        const sprite = document.createElement('div')
         const top = player.sprite.position.top + 'px' 
         const left = player.sprite.position.left + 'px' 
+
+        const sprite = document.createElement('div')
+        sprite.classList.add('emblem')
+
+        /**/ // inline style can be nightmare for maintainers
         const style = `background: url('${player.sprite.url}') left ${left} top ${top};`
         sprite.setAttribute('style', style)
-        sprite.classList.add('emblem')
-        logo_dom.append(sprite)
+        /**/ 
+
+        /** / // better option, but harder to test
+        const emblem_class = 'bd3a4cd9' // anything random
+        sprite.classList.add(emblem_class)
+        const style = document.createElement('style')
+        style.innerText = `
+        .${emblem_class} {
+            background: url('${player.sprite.url}') left ${left} top ${top};
+        }`
+        /**/ 
+
+        dom.logo.append(sprite, style)
 
         const player_photo = document.createElement('img')
         player_photo.src = player.img_url
         player_photo.classList.add('player_photo')
-        img_dom.append(player_photo)
+        dom.img.append(player_photo)
 
         const name = document.createElement('h2')
         name.innerText = player.name
         name.classList.add('player_name')
-        title_dom.append(name)
+        dom.title.append(name)
 
         const position = document.createElement('h3')
         position.innerText = player.position
         position.classList.add('player_team')
-        subtitle_dom.append(position)
+        dom.subtitle.append(position)
 
         return {
-            img: img_dom,
-            logo: logo_dom,
-            title: title_dom,
-            subtitle: subtitle_dom,
+            img: dom.img,
+            logo: dom.logo,
+            title: dom.title,
+            subtitle: dom.subtitle,
         }
     }
 
