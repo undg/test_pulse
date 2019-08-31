@@ -1,0 +1,23 @@
+@import './_variables.scss';
+.root {
+    .card {
+        background-image: url(../../assets/img/bg_pattern.png)
+    }
+    .dropdown{
+        span,
+        li {
+            background: $grey;
+        }
+    }
+    .title,
+    .subtitle,
+    .stats {
+        background: $red;
+    }
+    .stats {
+    }
+    .stats_row {
+        background: $white;
+        box-shadow: 0px 0px 5px -1px;
+    }
+}
