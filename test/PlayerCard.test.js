@@ -228,8 +228,47 @@ describe('PlayerCard.js', () => {
                     expect(header.logo.firstElementChild.style.backgroundPosition).to.eq('-1000px')
                 })
             })
+        })
+
+
+
+        describe('dropdown()', () => {
+            const lang = {
+                select_player: { en: 'Select a player...'}
+            }
+            const dropdown = playerCard.dropdown({
+                dropdown_dom: playerCard.dom.dropdown,
+            playersNames_data: ['Name Surname', 'Second player'],
+                lang: lang,
+            })
+
+            it('should have a <span class="title">', () => {
+                expect(dropdown.childNodes[0].tagName).to.eq('SPAN')
+            })
+
+            it('should have a <span class="title">', () => {
+                expect(dropdown.childNodes[0].innerText).to.eq(lang.select_player.en)
+            })
+
+            it('should have a <UL>', () => {
+                expect(dropdown.childNodes[1].tagName).to.eq('UL')
+            })
+
+            it('should have a <LI>', () => {
+                expect(dropdown.childNodes[1].firstElementChild.tagName).to.eq('LI')
+            })
+
+            it('should have a <LI>', () => {
+                expect(dropdown.childNodes[1].firstElementChild.innerText).to.eq('Name Surname')
+            })
+
+            it('should have a <LI>', () => {
+                expect(dropdown.childNodes[1].childNodes[1].innerText).to.eq('Second player')
+            })
 
         })
+
+
 
     })
 })

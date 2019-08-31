@@ -1,14 +1,15 @@
 export default class {
     constructor({player_data, img_url}) {
         this.api = {
-            name     : player_data.name.first,
-            surname  : player_data.name.last,
-            position : player_data.info.positionInfo,
-            id       : player_data.id,
-            img_url  : img_url,
-            team_id  : player_data.currentTeam.id,
+                name     : player_data.name.first,
+                surname  : player_data.name.last,
+                position : player_data.info.positionInfo,
+                id       : player_data.id,
+                team_id  : player_data.currentTeam.id,
+                img_url  : !!img_url && img_url,
         }
     }
+
     get name() {
         const name = `${this.api.name} ${this.api.surname}`
         return name

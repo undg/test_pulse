@@ -22,6 +22,10 @@ export default class {
             position: data => "tmp",
         }
 
+        this.lang = {
+            select_player: {en: "Select a player..."}
+        }
+
 
         this.old_dom = {} // helper obj, history buffer
         this.data //
@@ -67,6 +71,16 @@ export default class {
             img_url: this.img_url,
             player_data: this.player.player(data),
         })
+
+        const dropdown = this.dropdown({
+            dropdown_dom: this.dom.dropdown,
+            playersNames_data: data.players.map(
+                el => el.player.name.first + ' ' + el.player.name.last
+            ),
+            lang: this.lang,
+        })
+
+        this.dom.dropdown = dropdown
 
         this.dom.img = header.img
         this.dom.logo = header.logo
@@ -115,7 +129,20 @@ export default class {
 
 
 
-    dropdown() {
+    dropdown({dropdown_dom, playersNames_data, lang}) {
+        const span = document.createElement('span')
+        span.innerText = lang.select_player.en
+
+        const ul = document.createElement('ul')
+        const names = playersNames_data.map(name => {
+            const li = document.createElement('li')
+            li.innerText = name
+            ul.append(li)
+        })
+
+        dropdown_dom.append(span)
+        dropdown_dom.append(ul)
+        return dropdown_dom
     }
 
 

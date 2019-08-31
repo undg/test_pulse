@@ -13,7 +13,7 @@
 // maybe randomly generated class name (it should be fast to install mudule?)
 .root {
     .card {
-        > * { box-sizing: border-box; } // for every sibling in this container
+        * { box-sizing: border-box; }
         width: 300px;
         display: flex;
         justify-content: center;
@@ -30,9 +30,36 @@
         }
 
         .dropdown{
-            height: 40px;
+            $height: 40px;
+            height: $height;
             width: 270px;
             margin: $cardPadding;
+            ul {
+                width: 100%;
+                height: auto;
+            }
+            span {
+                &:after {
+                    content: "";
+                    $size: 12px;
+                    width: $size;
+                    height: $size;
+                    border-right: 2px solid black;
+                    border-bottom: 2px solid black;
+                    transform: rotate(45deg) translate3d(-2px, -2px, 0);
+                }
+            }
+            span,
+            li {
+                display: block;
+                height: $height;
+                display: flex;
+                padding: 0 16px;
+                align-items: center;
+                justify-content: space-between;
+                position: relative;
+                z-index: 10;
+            }
         }
         .img{
             height: 220px;
@@ -67,12 +94,10 @@
             width: calc(100% - #{$cardPadding * 2});
             height: 40px;
             padding-top: $cardPadding;
-            font-size: 18px;
         }
         .subtitle{
             width: calc(100% - #{$cardPadding * 2});
             padding-top: $cardPadding;
-            font-size: 14px;
         }
         .stats {
             margin-top: $cardPadding;
