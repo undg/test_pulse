@@ -1,0 +1,10 @@
+*.swp
+*.swo
+*.swa
+Session.vim
+*.vim
+.tern-port
+
+.DS_Store
+
+node_modules/
