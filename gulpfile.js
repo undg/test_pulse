@@ -156,17 +156,17 @@ const jsEs6 = () => {
     return stream
 }
 
-gulp.task('js', ()=>{
+gulp.task('js', gulp.parallel(()=>{
     jsEs5()
     jsEs6().on('end', bsync.reload)
-})
+}))
 
 
 
 // STYLE
 //////////////////////////////////////////////
 let scss_constructor_task = (obj_name) => {
-    gulp.task(obj_name, () => {
+    gulp.task(obj_name, gulp.series( () => {
         let stream = gulp.src(css[obj_name].src, { base: './scss' })
         stream = stream.pipe(plumber())
         stream = IS_DEV ? stream.pipe(sourcemaps.init()) : stream
@@ -180,7 +180,7 @@ let scss_constructor_task = (obj_name) => {
         stream = stream.pipe(bsync.stream())
 
         return stream
-    })
+    }))
 }
 
 
@@ -194,47 +194,40 @@ const tasks = [
 
 tasks.forEach( task => scss_constructor_task(task) )
 
-gulp.task('scss', tasks)
+gulp.task('scss', gulp.parallel(tasks))
 
 const scss_constructor_watch = (obj_name) => {
-    gulp.watch(css[obj_name].src, [obj_name])
+    gulp.watch(css[obj_name].src, gulp.series(obj_name))
 }
 
 
 // WATCHER'S
 //////////////////////////////////////////////
 const watch_scss = () => {
-    // for MODERN PROJECTS based on import's from index.scss
-    /**/
-    gulp.watch('./src/scss/**/*.scss', ['scss'])
-    /**/
-
-    // for big LEGACY PROJECTS
-    // based on concatenation via `css` object (fisrt object in this file)
-    /** /
-    tasks.forEach( task => scss_constructor_watch(task) )
-    /**/
+    gulp.watch('./src/scss/**/*.scss', gulp.series('scss'))
 }
 
 
 
-gulp.task('watch_default', () =>  {
+gulp.task('watch_default', gulp.parallel( () =>  {
     watch_scss()
-    gulp.watch(['./src/js/**/*.js'], ['js'])
-})
+    gulp.watch(['./src/js/**/*.js'], gulp.series(jsEs6))
+}))
 
 
 
 // BROWSERSYNC
 //////////////////////////////////////////////
-gulp.task('watch_bs', ['browserSync'], () => {
+gulp.task('browserSync', gulp.parallel( () => bsync.init(set_browserSync)))
+
+gulp.task('watch_bs', gulp.parallel('browserSync', () => {
     watch_scss()
-    gulp.watch(['./src/js/**/*.js', '!./src/js/**/node_modules/**'], ['js'])
+    gulp.watch('./src/js/**/*.js', jsEs6)
     gulp.watch([
         './**/*.php',
         './**/*.html',
     ], {delay: 300}).on( 'change', bsync.reload )
-})
+}))
 
 
 
@@ -265,7 +258,6 @@ const set_browserSync = {
     }
 }
 
-gulp.task('browserSync', () => bsync.init(set_browserSync))
 
 
 //////////////////////////////////////////////
@@ -293,15 +285,15 @@ gulp.task('browserSync', () => bsync.init(set_browserSync))
 
 // COMPILE AND WATCH
 // >$ npx gulp watch
-gulp.task('watch', ['scss', 'js', 'watch_default'])
+gulp.task('watch', gulp.parallel('scss', jsEs6, 'watch_default'))
 
 // COMPILE, WATCH AND HOT RELOAD + EXTRA DEV TOOLS
 // >$ npx gulp bs
-gulp.task('bs', ['watch_bs', 'scss', 'js'])
+gulp.task('bs', gulp.parallel('watch_bs', 'scss', jsEs6))
 
 // COMPILE AND EXIT
 // >$ npx gulp
-gulp.task('default', ['scss', 'js'])
+gulp.task('default', gulp.parallel('scss', jsEs6))
 
 // COMPILER
 //////////////////////////////////////////////
