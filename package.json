@@ -1,12 +1,12 @@
 {
-    "name": "b.laskowski",
+    "name": "@undg/player-card",
     "version": "1.0.0",
-    "description": "gulp",
+    "description": "Player card",
     "repository": {
         "type": "git",
         "url": "git@github.com:und3rdg/test_pulse"
     },
-    "main": "gulpfile.js",
+    "main": "src/js/index.js",
     "scripts": {
         "start": "gulp bs",
         "bs": "gulp bs",
@@ -22,7 +22,7 @@
             "pre-push": "npm run prod && npm run test:once && ./deploy.sh"
         }
     },
-    "author": "Bartek Laskowski",
+    "author": "undg",
     "license": "MIT",
     "devDependencies": {
         "@babel/core": "^7.0.0",
