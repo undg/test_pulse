@@ -1,3 +1,4 @@
+@import './_variables.scss';
 .container {
     width: 100%;
     min-height: 100vh;
@@ -37,6 +38,18 @@
             ul {
                 width: 100%;
                 height: auto;
+                visibility: hidden;
+                opacity: 0;
+                transition: opacity .1s ease;
+            }
+            &.open {
+                span:after {
+                    transform: rotate(calc(45deg + 180deg)) translate3d(-2px, -2px, 0);
+                }
+                ul {
+                    visibility: visible;
+                    opacity: 1;
+                }
             }
             span {
                 &:after {
@@ -59,6 +72,8 @@
                 justify-content: space-between;
                 position: relative;
                 z-index: 10;
+                background: $grey;
+                cursor: pointer;
             }
         }
         .img{

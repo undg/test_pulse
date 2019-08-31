@@ -33,7 +33,7 @@ describe('PlayerCard.js', () => {
     })
 
 
-    const playerCard = new PlayerCard({dom_id: "id"})
+    const playerCard = new PlayerCard({dom_id: "id", tdd: true})
 
     describe('constructor', () => {
         it('should have api key', () => {
@@ -56,10 +56,6 @@ describe('PlayerCard.js', () => {
     describe('dom elements', () => {
         it('should have link from data-url attr', () => {
             expect(playerCard.api_url).to.eq(api_url)
-        })
-
-        it('should have old_dom that is and object', () => {
-            expect(playerCard.old_dom).to.be.an('object')
         })
 
         const divs = [ 'root', 'card', 'dropdown', 'img', 'logo', 'title', 'subtitle', 'stats']
@@ -242,11 +238,11 @@ describe('PlayerCard.js', () => {
                 lang: lang,
             })
 
-            it('should have a <span class="title">', () => {
+            it('should have a <span>', () => {
                 expect(dropdown.childNodes[0].tagName).to.eq('SPAN')
             })
 
-            it('should have a <span class="title">', () => {
+            it('should have a player name from lang obj', () => {
                 expect(dropdown.childNodes[0].innerText).to.eq(lang.select_player.en)
             })
 
@@ -258,11 +254,11 @@ describe('PlayerCard.js', () => {
                 expect(dropdown.childNodes[1].firstElementChild.tagName).to.eq('LI')
             })
 
-            it('should have a <LI>', () => {
+            it('should have a player name from arr[0]', () => {
                 expect(dropdown.childNodes[1].firstElementChild.innerText).to.eq('Name Surname')
             })
 
-            it('should have a <LI>', () => {
+            it('should have a player name from arr[1]', () => {
                 expect(dropdown.childNodes[1].childNodes[1].innerText).to.eq('Second player')
             })
 

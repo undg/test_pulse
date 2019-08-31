@@ -3,7 +3,9 @@ import Stats from './adapters/Stats'
 import Player from './adapters/Player'
 
 export default class {
-    constructor({dom_id, dom_className, dom_dataAttr}) {
+    constructor({dom_id, dom_className, dom_dataAttr, tdd}) {
+        this.tdd = tdd
+
         this.dom = {
             root: null,
             card: document.createElement('div'),
@@ -16,7 +18,7 @@ export default class {
         }
 
         this.player = {
-            idx: 0, // tmp hardcoded
+            idx: 0,
             stats: data => data.players[this.player.idx].stats,
             player: data => data.players[this.player.idx].player,
             position: data => "tmp",
@@ -26,9 +28,6 @@ export default class {
             select_player: {en: "Select a player..."}
         }
 
-
-        this.old_dom = {} // helper obj, history buffer
-        this.data //
 
         if(!!dom_id) {
             this.dom.root = document.getElementById(dom_id)
@@ -46,14 +45,29 @@ export default class {
         this.api.get_data({cb: this.update.bind(this)})
 
         this.dom = this.set_classNames(this.dom)
+
+        this.data // static data from api
     }
 
 
 
     update(data) {
-        while (this.dom.root.hasChildNodes()) {
-            this.dom.root.removeChid(this.dom.root.lastChild)
+        // jsdom doesn't have a click events... testing DOM is hard :p
+        // I prefer to sacrifice 7 lines of code than 30+ tests.
+        if(this.tdd) {
+            while (this.dom.root.hasChildNodes()) {
+                this.dom.root.removeChid(this.dom.root.lastChild)
+            }
+        } else {
+            this.dom.dropdown.innerHTML = ""
+            this.dom.img.innerHTML = ""
+            this.dom.logo.innerHTML = ""
+            this.dom.title.innerHTML = ""
+            this.dom.subtitle.innerHTML = ""
+            this.dom.card.innerHTML = ""
+            this.dom.stats.innerHTML = ""
         }
+
         if(!data.players) { // w8 for api
             return
         }
@@ -132,10 +146,16 @@ export default class {
     dropdown({dropdown_dom, playersNames_data, lang}) {
         const span = document.createElement('span')
         span.innerText = lang.select_player.en
+        span.addEventListener('click', () => dropdown_dom.classList.toggle('open'))
 
         const ul = document.createElement('ul')
-        const names = playersNames_data.map(name => {
+        const names = playersNames_data.forEach((name, idx) => {
             const li = document.createElement('li')
+            li.addEventListener('click', () => {
+                this.player.idx = idx
+                dropdown_dom.classList.toggle('open')
+                this.update(this.data)
+            })
             li.innerText = name
             ul.append(li)
         })
