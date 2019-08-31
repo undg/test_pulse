@@ -1,4 +1,3 @@
-
 export default class {
     constructor({stats_data}) {
         this.api = {

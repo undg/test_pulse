@@ -37,22 +37,25 @@
         .img{
             height: 220px;
             margin: 0 $cardPadding;
-            width: calc(100% - #{$cardPadding * 2})
+            width: calc(100% - #{$cardPadding * 2});
         }
         .logo{
             height: 0;
             position: relative;
         }
         .title{
+            width: calc(100% - #{$cardPadding * 2});
             height: 40px;
             padding-top: $cardPadding;
-            padding-bottom: 10px;
             font-size: 18px;
         }
         .subtitle{
+            width: calc(100% - #{$cardPadding * 2});
+            padding-top: $cardPadding;
             font-size: 14px;
         }
         .stats {
+            margin-top: $cardPadding;
             padding: $cardPadding;
         }
         .stats_row {

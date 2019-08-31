@@ -1,7 +1,7 @@
 console.log('\n\n\n\n')
 const expect = require('chai').expect
 const json = require('../api/player-stats.json')
-import Stats from './../src/js/stats'
+import Stats from './../src/js/adapters/Stats'
 const stats = new Stats({stats_data: json.players[0].stats})
 
 describe('stats.js', () => {
