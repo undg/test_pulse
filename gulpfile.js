@@ -139,6 +139,7 @@ const jsEs6 = () => {
         process.env.NODE_ENV = 'production';
     }
     let stream = browserify(set_browserify)
+    stream = stream.add(require.resolve('babel-polyfill'))
     stream = stream.transform(babelify.configure(set_babelify))
     IS_DEV && stream.plugin(watchify, {})
 

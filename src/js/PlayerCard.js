@@ -101,7 +101,7 @@ export default class {
         this.dom.subtitle = header.subtitle
         this.dom.stats    = stats
 
-        this.dom.root.append(this.dom.card)
+        this.dom.root.insertBefore(this.dom.card, this.dom.root.lastChild)
     }
 
 
@@ -117,14 +117,12 @@ export default class {
         this.data = data
         if(!data) { return null }
 
-        dom.card.append(
-            dom.dropdown,
-            dom.img,
-            dom.logo,
-            dom.title,
-            dom.subtitle,
-            dom.stats,
-        )
+        dom.card.insertBefore(dom.stats, dom.card.lastChild)
+        dom.card.insertBefore(dom.subtitle, dom.stats)
+        dom.card.insertBefore(dom.title, dom.subtitle)
+        dom.card.insertBefore(dom.logo, dom.title)
+        dom.card.insertBefore(dom.img, dom.logo)
+        dom.card.insertBefore(dom.dropdown, dom.img)
 
         return dom.card
     }
@@ -139,19 +137,28 @@ export default class {
         })
 
         const ul = document.createElement('ul')
-        const names = playersNames_data.forEach((name, idx) => {
+
+
+        // playersNames_data.forEach((name, idx) => {
+        let last_li = ul.lastChild
+        for(let i = playersNames_data.length - 1; i >= 0; i--){
             const li = document.createElement('li')
             li.addEventListener('click', () => {
-                this.player.idx = idx
+                this.player.idx = i
                 dropdown_dom.classList.toggle('open')
                 // update with static data, but we can call another API
                 this.update(this.data)
             })
-            li.innerText = name
-            ul.append(li)
-        })
+            li.innerText = playersNames_data[i]
 
-        dropdown_dom.append(span, ul)
+            ul.insertBefore(li, last_li)
+            last_li = li
+        }
+
+
+
+        dropdown_dom.insertBefore(ul, dropdown_dom.lastChild)
+        dropdown_dom.insertBefore(span, ul)
         return dropdown_dom
     }
 
@@ -179,24 +186,25 @@ export default class {
         .${emblem_class} {
             background: url('${player.sprite.url}') left ${left} top ${top};
         }`
+        dom.logo.insertBefore(style, dom.logo.lastChild)
         /**/ 
 
-        dom.logo.append(sprite, style)
+        dom.logo.insertBefore(sprite, dom.logo.lastChild)
 
         const player_photo = document.createElement('img')
         player_photo.src = player.img_url
         player_photo.classList.add('player_photo')
-        dom.img.append(player_photo)
+        dom.img.insertBefore(player_photo, dom.img.lastChild)
 
         const name = document.createElement('h2')
         name.innerText = player.name
         name.classList.add('player_name')
-        dom.title.append(name)
+        dom.title.insertBefore(name, dom.title.lastChild)
 
         const position = document.createElement('h3')
         position.innerText = player.position
         position.classList.add('player_team')
-        dom.subtitle.append(position)
+        dom.subtitle.insertBefore(position, dom.subtitle.lastChild)
 
         return {
             img: dom.img,
@@ -211,21 +219,25 @@ export default class {
     stats({stats_dom, stats_data}) {
         const display = new Stats({stats_data: stats_data}).display
 
-        display.forEach(stat => {
+        let last_row = stats_dom.lastChild
+        for(let i = display.length - 1; i >= 0; i--){
             const row = document.createElement('div')
             row.classList.add("stats_row")
 
             const name = document.createElement('p')
-            name.innerText = stat.name
+            name.innerText = display[i].name
             name.classList.add("stats_name")
 
             const value = document.createElement('p')
-            value.innerText = `${stat.value}`
+            value.innerText = `${display[i].value}`
             value.classList.add("stats_value")
 
-            row.append(name, value)
-            stats_dom.append(row)
-        })
+            row.insertBefore(value, row.lastChild)
+            row.insertBefore(name, value)
+
+            stats_dom.insertBefore(row, last_row)
+            last_row = row
+        }
 
         return stats_dom
     }
